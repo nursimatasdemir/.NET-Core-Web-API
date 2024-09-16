@@ -1,4 +1,5 @@
 using api.Data;
+using api.Mappers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers;
@@ -20,7 +21,9 @@ public class StockController : ControllerBase
     public IActionResult GetAll()
     {
         //We used .ToList method to deferred execution it is going to make all sql things for itself
-        var stocks = _context.Stock.ToList();
+        //.Select kullanmadan toStockDto a atama yapamayız .Select() ToStockDto a immutable bir list geri döndürür
+        var stocks = _context.Stock.ToList()
+            .Select(s => s.ToStockDto());
         return Ok(stocks);
         //we return everything on the datbase
     }
@@ -35,6 +38,6 @@ public class StockController : ControllerBase
         {
             return NotFound(); //stok boş olduğunda geri dönüş yapmamız lazım
         }
-        return Ok(stock);
+        return Ok(stock.ToStockDto());
     }
 }
