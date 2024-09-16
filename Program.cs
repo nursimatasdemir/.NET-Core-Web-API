@@ -23,10 +23,10 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+}      
 
 app.UseHttpsRedirection();
-
+//Controller kullanmak için 
 app.MapControllers();
 
 app.Run();
