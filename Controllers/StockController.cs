@@ -50,6 +50,7 @@ public class StockController : ControllerBase
         _context.SaveChanges();
         return CreatedAtAction(nameof(GetById), new { id = stockModel.Id }, stockModel.ToStockDto());
         //bu kod şu anlama geliyor eğer ,den önceki kısım çalışırsa stockModelin idsini alıp ide e atıyor.
-        //sonra da ToStockDto objesine veriyorC
+        //sonra da ToStockDto objesine veriyor 
+        //ÇÜNKÜ VERİ TABANINA ID OLMADAN VERİ ATAYAMAZSIN. VERİNİN KULLANICIDAN IDSİNİ ALMIYORUZ AMA BUNU ARKADA BİZİM ATMAMIZ GEREKİYOR
     }
 }
