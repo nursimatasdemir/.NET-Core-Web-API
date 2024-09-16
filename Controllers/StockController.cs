@@ -1,4 +1,5 @@
 using api.Data;
+using api.DTOs.Stock;
 using api.Mappers;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,5 +40,16 @@ public class StockController : ControllerBase
             return NotFound(); //stok boş olduğunda geri dönüş yapmamız lazım
         }
         return Ok(stock.ToStockDto());
+    }
+
+    [HttpPost]
+    public IActionResult Create([FromBody] CreateStockRequestDto stockDto)
+    {
+        var stockModel = stockDto.ToStockFromCreateDTO();
+        _context.Stock.Add(stockModel);
+        _context.SaveChanges();
+        return CreatedAtAction(nameof(GetById), new { id = stockModel.Id }, stockModel.ToStockDto());
+        //bu kod şu anlama geliyor eğer ,den önceki kısım çalışırsa stockModelin idsini alıp ide e atıyor.
+        //sonra da ToStockDto objesine veriyorC
     }
 }
