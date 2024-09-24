@@ -14,27 +14,31 @@ public class CommentRepository : ICommentRepository
     {
         _context = context;
     }
-    public override async Task<List<Comment>> GetAllCommentsAsync()
+    public  async Task<List<Comment>> GetAllCommentsAsync()
     {
         return await _context.Comment.ToListAsync();
     }
     
     //18 Eylül Çarşamba günü yazılan GetCommentByIdAsync fonksiyonu
-    public override async Task<Comment?> GetCommentByIdAsync(int id)
+    public  async Task<Comment?> GetCommentByIdAsync(int id)
     {
         return await _context.Comment.FindAsync(id);
     }
     
 
-    public override async Task<Comment> AddCommentAsync(Comment commentModel)
-    {
+    public  async Task<Comment> AddCommentAsync(Comment commentModel)
+    { 
+        DateTime localdateTime = DateTime.Now;
+        DateTime utcdateTime = localdateTime.ToUniversalTime();
+        commentModel.CreatedOn= utcdateTime;
+            
         await _context.Comment.AddAsync(commentModel);
         await _context.SaveChangesAsync();
         return commentModel;
     }
     
 
-    public override async Task<Comment?> UpdateCommentAsync(int id, UpdateCommentRequestDto commentDto)
+    public  async Task<Comment?> UpdateCommentAsync(int id, UpdateCommentRequestDto commentDto)
     {
         var existingComment = await _context.Comment.FirstOrDefaultAsync(x=>x.Id == id);
         if (existingComment == null)
@@ -52,7 +56,7 @@ public class CommentRepository : ICommentRepository
         
     }
 
-    public override async Task<Comment?> DeleteCommentAsync(int id)
+    public  async Task<Comment?> DeleteCommentAsync(int id)
     {
         var commentModel = await _context.Comment.FirstOrDefaultAsync(x => x.Id == id);
         if (commentModel == null)

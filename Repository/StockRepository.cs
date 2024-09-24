@@ -13,24 +13,24 @@ public class StockRepository : IStockRepository
         _context = context;
     }
 
-    public override async Task<List<Stock>> GetAllAsync()
+    public  async Task<List<Stock>> GetAllAsync()
     {
        return await _context.Stock.Include(c => c.Comments).ToListAsync();
     }
 
-    public override async Task<Stock?> GetByIdAsync(int id)
+    public async Task<Stock?> GetByIdAsync(int id)
     {
         return await _context.Stock.Include(c => c.Comments).FirstOrDefaultAsync(i => i.Id == id);
     }
 
-    public async override Task<Stock> CreateAsync(Stock stockModel)
+    public async  Task<Stock> CreateAsync(Stock stockModel)
     {
         await _context.Stock.AddAsync(stockModel);
         await _context.SaveChangesAsync();
         return stockModel;
     }
 
-    public async override Task<Stock?> UpdateAsync(int id, UpdateStockRequestDto stockDto)
+    public async  Task<Stock?> UpdateAsync(int id, UpdateStockRequestDto stockDto)
     {
         var existingstock = await _context.Stock.FirstOrDefaultAsync(x => x.Id == id);
         if (existingstock == null)
@@ -48,7 +48,7 @@ public class StockRepository : IStockRepository
         return existingstock;
     }
 
-    public async override Task<Stock?> DeleteAsync(int id)
+    public async  Task<Stock?> DeleteAsync(int id)
     {
         var stockModel = await _context.Stock.FirstOrDefaultAsync(x => x.Id == id);
         if (stockModel == null)
@@ -58,5 +58,10 @@ public class StockRepository : IStockRepository
         _context.Stock.Remove(stockModel);
         await _context.SaveChangesAsync();
         return stockModel;
+    }
+
+    public async  Task<bool> StockExists(int id)
+    {
+        return await _context.Stock.AnyAsync(i => i.Id == id);
     }
 }
