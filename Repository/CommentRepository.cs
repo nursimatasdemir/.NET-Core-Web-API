@@ -38,18 +38,16 @@ public class CommentRepository : ICommentRepository
     }
     
 
-    public  async Task<Comment?> UpdateCommentAsync(int id, UpdateCommentRequestDto commentDto)
+    public  async Task<Comment?> UpdateCommentAsync(int id, Comment commentModel)
     {
-        var existingComment = await _context.Comment.FirstOrDefaultAsync(x=>x.Id == id);
+        var existingComment = await _context.Comment.FindAsync(id);
         if (existingComment == null)
         {
             return null;
         }
         
-        existingComment.Title = commentDto.Title;
-        existingComment.Content = commentDto.Content;
-        existingComment.CreatedOn = commentDto.CreatedOn;
-        existingComment.StockId = commentDto.StockId;
+        existingComment.Title = commentModel.Title;
+        existingComment.Content = commentModel.Content;
         
         await _context.SaveChangesAsync();
         return existingComment;
