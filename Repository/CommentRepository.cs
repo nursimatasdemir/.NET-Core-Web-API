@@ -18,11 +18,13 @@ public class CommentRepository : ICommentRepository
     {
         return await _context.Comment.ToListAsync();
     }
-
+    
+    //18 Eylül Çarşamba günü yazılan GetCommentByIdAsync fonksiyonu
     public override async Task<Comment?> GetCommentByIdAsync(int id)
     {
         return await _context.Comment.FindAsync(id);
     }
+    
 
     public override async Task<Comment> AddCommentAsync(Comment commentModel)
     {

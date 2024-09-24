@@ -4,9 +4,7 @@ using api.Interfaces;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace api.Repository;
-
 public class StockRepository : IStockRepository
 {
     private readonly ApplicationDbContext _context;
@@ -17,12 +15,12 @@ public class StockRepository : IStockRepository
 
     public override async Task<List<Stock>> GetAllAsync()
     {
-       return await _context.Stock.ToListAsync();
+       return await _context.Stock.Include(c => c.Comments).ToListAsync();
     }
 
     public override async Task<Stock?> GetByIdAsync(int id)
     {
-        return await _context.Stock.FindAsync(id);
+        return await _context.Stock.Include(c => c.Comments).FirstOrDefaultAsync(i => i.Id == id);
     }
 
     public async override Task<Stock> CreateAsync(Stock stockModel)

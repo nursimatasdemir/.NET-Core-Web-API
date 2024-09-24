@@ -3,6 +3,7 @@ using api.DTOs.Comment;
 using api.Interfaces;
 using api.Mappers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers;
 [Route("api/comment")]
@@ -16,7 +17,7 @@ public class CommentController : ControllerBase
         _context = context;
         _commentRepo = commentRepo;
     }
-
+    
     [HttpGet]
     public async Task<IActionResult> GetAllComments()
     {
@@ -24,18 +25,19 @@ public class CommentController : ControllerBase
         var commentDto = comments.Select(s => s.ToCommentDto());
         return Ok(commentDto);
     }
-
+    
     [HttpGet("{id}")]
     public async Task<IActionResult> GetCommentById([FromRoute] int id)
     {
         var comment = await _commentRepo.GetCommentByIdAsync(id);
+    
         if (comment == null)
         {
             return NotFound();
         }
+        
         return Ok(comment.ToCommentDto());
     }
-
     [HttpPost]
     public async Task<IActionResult> AddComment([FromBody] CreateCommentRequestDto commentDto)
     {
@@ -67,9 +69,11 @@ public class CommentController : ControllerBase
         {
             return NotFound();
         }
-
+    
         return NoContent();
     }
+
+
 }
 
 

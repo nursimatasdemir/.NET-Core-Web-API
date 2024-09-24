@@ -1,3 +1,5 @@
+using api.DTOs.Comment;
+
 namespace api.DTOs.Stock;
 
 public class StockDto
@@ -11,6 +13,6 @@ public class StockDto
     public string Industry { get; set; } = string.Empty;
 
     public long MarketCap { get; set; }
-    //Comments were here but we don't want them in this scenario
-    //These are the props we want to return as a new object
+    
+    public List<CommentDto> Comments { get; set; }
 }
