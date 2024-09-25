@@ -1,10 +1,12 @@
 using api.Data;
 using api.DTOs.Stock;
+using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using api.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Build.Framework;
 
 namespace api.Controllers;
 
@@ -24,19 +26,17 @@ public class StockController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
-        //We used .ToList method to deferred execution it is going to make all sql things for itself
-        //.Select kullanmadan toStockDto a atama yapamayız .Select() ToStockDto a immutable bir list geri döndürür
-        var stocks = await _stockRepo.GetAllAsync();
+        var stocks = await _stockRepo.GetAllAsync(query);
         
         var stockDto = stocks.Select(s => s.ToStockDto());
         
-        return Ok(stockDto);
+        return Ok(stocks);
         //we return everything on the datbase
     }
     

@@ -1,5 +1,6 @@
 using api.Data;
 using api.DTOs.Stock;
+using api.Helpers;
 using api.Interfaces;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -13,10 +14,22 @@ public class StockRepository : IStockRepository
         _context = context;
     }
 
-    public  async Task<List<Stock>> GetAllAsync()
+    public async Task<List<Stock>> GetAllAsync(QueryObject query)
     {
-       return await _context.Stock.Include(c => c.Comments).ToListAsync();
+        var stocks = _context.Stock.Include(c => c.Comments).AsQueryable();
+        
+        if (!string.IsNullOrWhiteSpace(query.Symbol))
+        {
+            stocks = stocks.Where(s => s.Symbol.ToLower().Contains(query.Symbol.ToLower()));
+        }
+        else if (!string.IsNullOrWhiteSpace(query.CompanyName))
+        {
+            stocks = stocks.Where(s=>s.CompanyName.ToLower().Contains(query.CompanyName.ToLower()));
+        }
+        return await stocks.ToListAsync();
     }
+
+
 
     public async Task<Stock?> GetByIdAsync(int id)
     {

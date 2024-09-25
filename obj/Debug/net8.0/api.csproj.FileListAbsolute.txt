@@ -145,3 +145,4 @@
 /Users/nursimatasdemir/RiderProjects/WebAPI/api/api/bin/Debug/net8.0/Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 /Users/nursimatasdemir/RiderProjects/WebAPI/api/api/bin/Debug/net8.0/Newtonsoft.Json.dll
 /Users/nursimatasdemir/RiderProjects/WebAPI/api/api/bin/Debug/net8.0/Newtonsoft.Json.Bson.dll
+/Users/nursimatasdemir/RiderProjects/WebAPI/api/api/bin/Debug/net8.0/Microsoft.Build.Framework.dll
