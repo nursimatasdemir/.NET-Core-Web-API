@@ -10,7 +10,7 @@ public static class StockMappers
         //We will return this object as a new object
         return new StockDto()
         {
-            Id = stockModel.Id,
+            Id = stockModel.StockId,
             Symbol = stockModel.Symbol,
             CompanyName = stockModel.CompanyName,
             Industry = stockModel.Industry,

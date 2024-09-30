@@ -4,6 +4,7 @@ using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using api.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Build.Framework;
@@ -26,6 +27,7 @@ public class StockController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
     {
         if (!ModelState.IsValid)
@@ -72,7 +74,7 @@ public class StockController : ControllerBase
         
         await _stockRepo.CreateAsync(stockModel);
         
-        return CreatedAtAction(nameof(GetById), new { id = stockModel.Id }, stockModel.ToStockDto());
+        return CreatedAtAction(nameof(GetById), new { id = stockModel.StockId }, stockModel.ToStockDto());
         //bu kod şu anlama geliyor eğer ,den önceki kısım çalışırsa stockModelin idsini alıp ide e atıyor.
         //sonra da ToStockDto objesine veriyor 
         //ÇÜNKÜ VERİ TABANINA ID OLMADAN VERİ ATAYAMAZSIN. VERİNİN KULLANICIDAN IDSİNİ ALMIYORUZ AMA BUNU ARKADA BİZİM ATMAMIZ GEREKİYOR

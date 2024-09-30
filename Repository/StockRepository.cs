@@ -41,7 +41,7 @@ public class StockRepository : IStockRepository
 
     public async Task<Stock?> GetByIdAsync(int id)
     {
-        return await _context.Stock.Include(c => c.Comments).FirstOrDefaultAsync(i => i.Id == id);
+        return await _context.Stock.Include(c => c.Comments).FirstOrDefaultAsync(i => i.StockId == id);
     }
 
     public async  Task<Stock> CreateAsync(Stock stockModel)
@@ -53,7 +53,7 @@ public class StockRepository : IStockRepository
 
     public async  Task<Stock?> UpdateAsync(int id, UpdateStockRequestDto stockDto)
     {
-        var existingstock = await _context.Stock.FirstOrDefaultAsync(x => x.Id == id);
+        var existingstock = await _context.Stock.FirstOrDefaultAsync(x => x.StockId == id);
         if (existingstock == null)
         {
             return null;
@@ -71,7 +71,7 @@ public class StockRepository : IStockRepository
 
     public async  Task<Stock?> DeleteAsync(int id)
     {
-        var stockModel = await _context.Stock.FirstOrDefaultAsync(x => x.Id == id);
+        var stockModel = await _context.Stock.FirstOrDefaultAsync(x => x.StockId == id);
         if (stockModel == null)
         {
             return null;
@@ -83,6 +83,6 @@ public class StockRepository : IStockRepository
 
     public async  Task<bool> StockExists(int id)
     {
-        return await _context.Stock.AnyAsync(i => i.Id == id);
+        return await _context.Stock.AnyAsync(i => i.StockId == id);
     }
 }
