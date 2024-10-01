@@ -51,7 +51,7 @@ builder.Services.AddSwaggerGen(option =>
 //created a service to builder it will connect to our database
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseNpgsql(connectionString:"Host=localhost;Database=postgres;Username=admin;Password=admin");  
+    options.UseNpgsql(connectionString: "Host=localhost;Database=postgres;Username=admin;Password=admin;Include Error Detail=true");
 });
 
 builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
@@ -104,6 +104,14 @@ if (app.Environment.IsDevelopment())
 }      
 
 app.UseHttpsRedirection();
+
+app.UseCors(x => x
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .AllowCredentials()
+    //.WithOrigins("https://localhost:44351))
+    .SetIsOriginAllowed(origin => true));    
+
 app.UseAuthentication();
 app.UseAuthorization();
 //Controller kullanmak için 

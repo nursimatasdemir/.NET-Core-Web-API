@@ -1,7 +1,9 @@
 using api.Data;
 using api.DTOs.Comment;
+using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,13 +22,14 @@ public class CommentController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetAllComments()
+    [Authorize]
+    public async Task<IActionResult> GetAllComments([FromQuery] CommentQueryObject queryObject)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
-        var comments = await _commentRepo.GetAllCommentsAsync();
+        var comments = await _commentRepo.GetAllCommentsAsync(queryObject);
         var commentDto = comments.Select(s => s.ToCommentDto());
         return Ok(commentDto);
     }
