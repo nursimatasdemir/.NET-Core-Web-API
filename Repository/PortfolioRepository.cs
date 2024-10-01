@@ -14,7 +14,7 @@ public class PortfolioRepository : IPortfolioRepository
         _context = context;
     }
 
-    public async override Task<List<Stock>> GetUserPortfolio(AppUser user)
+    public async  override Task<List<Stock>> GetUserPortfolio(AppUser user)
     {
         return await _context.Portfolios.Where(u => u.AppUserId == user.Id)
             .Select(stock => new Stock
@@ -27,5 +27,12 @@ public class PortfolioRepository : IPortfolioRepository
                 Industry = stock.Stock.Industry,
                 MarketCap = stock.Stock.MarketCap,
             }).ToListAsync();
+    }
+
+    public async override Task<Portfolio> CreateAsync(Portfolio portfolio)
+    {
+        await _context.Portfolios.AddAsync(portfolio);
+        await _context.SaveChangesAsync();
+        return portfolio;
     }
 }

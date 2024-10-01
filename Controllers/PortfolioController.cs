@@ -31,4 +31,38 @@ public class PortfolioController : ControllerBase
         var userPortfolio = await _portfolioRepository.GetUserPortfolio(appUser);
         return Ok(userPortfolio);
     }
+
+    [HttpPost]
+    [Authorize]
+    public async Task<IActionResult> CreatePortfolio(string symbol)
+    {
+        var username = User.GetUsername();
+        var appUser = await _userManager.FindByNameAsync(username);
+        
+        var stock = await _stockRepository.GetBySymbolAsync(symbol);
+        
+        if(stock == null)
+            return BadRequest("Stock not found");
+        var userPortfolio = await _portfolioRepository.GetUserPortfolio(appUser);
+
+        if (userPortfolio.Any(e => e.Symbol.ToLower() == symbol.ToLower()))
+            return BadRequest("Symbol already exists");
+
+        var portfolioModel = new Portfolio
+        {
+            StockId = stock.StockId,
+            AppUserId = appUser.Id,
+        };
+        
+        await _portfolioRepository.CreateAsync(portfolioModel);
+
+        if (portfolioModel == null)
+        {
+            return StatusCode(500, "Could not create portfolio");
+        }
+        else
+        {
+            return Created();
+        }
+    }
 }
